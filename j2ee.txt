@@ -1,0 +1,75 @@
+  Response:
+    字节流输出中文:
+  ServletOutputStream outputStream=response.getOutputStream();
+  response.setHeader("Conent-Type","text/html;charset=UTF-8");
+  outputStream.write("中文".getBytes("UTF-8"));
+
+    字符流输出中文：
+  response.setContentType("text/html;charset=UTF-8");
+  response.getWriter().println("中文");
+
+    Request:
+  请求方式：request.getMethod()
+  客户机的IP地址：request.getRemoteAddr()
+  请求参数的字符串：request.getQueryString()
+  请求路径的URL（统一资源定位符）和URI（统一资源标识符）：
+  request.getRequestURL()
+  request.getRequestURI()
+  获得请求头：request.getHeader("User-Agent")
+
+    接收提交的信息：
+  String username=request.getParameter("username");(接收一个值)
+  String[] hobby=request.getParameterValues("hobby");(接收多个值)
+  多个值输出：Arrays.toString(hobby)
+    遍历方法：
+  Map<String,String[]>map=request.getParameterMap();
+    for(String key:map.keySet()){
+    String[] value=map.get(key);
+    System.out.println(key+"  "+Arrays.toString(value));
+  }
+
+    接收提交的中文信息会产生乱码：
+  Post:
+  原因：post方式提交的数据在请求体中，request对象接收到数据后放到request缓冲区中，
+缓冲区有编码（默认ISO-8859-1:不支持中文）
+  解决方案：修改request缓冲区编码：request.setCharacterEncoding("UTF-8");
+  Get:
+  原因：get方式提交的数据在URL后面，在地址栏上已经进行了一次编码。
+  解决方案：先将存入request缓冲区的内容以ISO-8859-1的方式获取，
+再以UTF-8的编码解码。
+  String encode=URLEncoder.encode(name,"ISO-8859-1");
+  String decode=URLDecoder.decode(encode,"UTF-8");
+    化简：
+  String value=new String(name.getBytes(""ISO-8859-1),"UTF-8");
+  
+    Cookie技术：
+  Cookie是客户端技术，将用户数据以cookie形式保存到自己的浏览器中
+  保存的数据有个数和大小的限制
+  获得从浏览器中带过来的所有Cookie:
+  Cookie[] cookies=request.getCookies();
+  
+  查找指定名称Cookie：
+  for(Cookie cookie:cookies){
+  if(name.equals(cookie.getName())){
+  return cookie;
+  }
+  }
+  return null;
+
+    Session技术：
+  Session是服务器技术，在服务器中为每一个用户的浏览器创建一个独享的session对象。
+  
+  servlet的域对象总结：
+  请求范围：servletRequest
+  会话范围：HttpSession
+  应用范围：  servletContext
+
+    Druid数据库连接池
+  1，导入jar包例：druid-1.1.12.jar
+  2，定义配置文件
+  3，加载配置文件
+  4，获取数据库连接池对象
+  5，获取连接
+
+  在html/jsp中加入值：${ count }
+  在html/jsp中加入java代码;<%  session %>
